@@ -1,5 +1,6 @@
 package chucknorris;
 
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 public class ChuckNorrisEncryption {
@@ -28,7 +29,7 @@ public class ChuckNorrisEncryption {
         return chuckNorrisStringBuilder.toString();
     }
 
-    public static String decodeChuckNorris_To_Binary(String chuckNorrisCode) {
+    public static String decodeChuckNorris_To_Binary(String chuckNorrisCode) throws IllegalArgumentException{
         StringBuilder binaryCode = new StringBuilder();
         StringTokenizer st = new StringTokenizer(chuckNorrisCode," ");
         String binaryDigit;
@@ -36,12 +37,18 @@ public class ChuckNorrisEncryption {
         int count;
         while(st.hasMoreTokens()) {
             binaryDigit = st.nextToken();
-            binaryDigitCount = st.nextToken();
+            try {
+                binaryDigitCount = st.nextToken();
+            } catch(NoSuchElementException e) {
+                throw new IllegalArgumentException("Encoded string is not valid.");
+            }
             count = binaryDigitCount.length();
             if(binaryDigit.equals("00")) {
                 binaryCode.append("0".repeat(count));
-            } else {
+            } else if(binaryDigit.equals("0")){
                 binaryCode.append("1".repeat(count));
+            } else {
+                throw new IllegalArgumentException("Encoded string is not valid.");
             }
         }
 
